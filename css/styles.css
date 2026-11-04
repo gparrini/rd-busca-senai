@@ -268,7 +268,7 @@ html, body { overflow-x: hidden; }
 .step.is-done + .step::before { background: var(--accent); }
 .guide__title { font-size: 22px; line-height: 30px; font-weight: 700; }
 .guide__lead { margin: 4px 0 14px; font-size: 14px; color: var(--text-muted); }
-.search--guide { max-width: none; }
+.search--guide { z-index: 10; max-width: none; }
 .search--guide .search__input { height: 52px; font-size: 16px; padding-left: 50px; border: 1px solid var(--border-strong); box-shadow: none; }
 .search--guide .search__input:focus { border-color: var(--primary-500); }
 .search--guide .search__icon { left: 16px; color: var(--secondary-700); }
