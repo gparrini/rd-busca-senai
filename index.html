@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Busca de Recursos Didáticos | SENAI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip" href="#resultados">Pular para os resultados</a>
+
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <div class="brand">
+        <span class="brand__mark" aria-hidden="true">SENAI</span>
+        <span class="brand__divider" aria-hidden="true"></span>
+        <span class="brand__name">Recursos Didáticos</span>
+      </div>
+      <div class="topbar__actions">
+        <a class="btn btn--ghost" href="https://recursosdidaticos.senai.br/" target="_blank" rel="noopener">RD tradicional <span aria-hidden="true">↗</span></a>
+        <button class="icon-btn" id="themeToggle" type="button" aria-label="Alternar modo escuro">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <p class="hero__eyebrow">Biblioteca de materiais por curso</p>
+      <h1 class="hero__title">Encontre o material didático do seu curso</h1>
+      <p class="hero__lead">Escolha o curso, a unidade curricular e o tipo de material. Ao clicar, você é levado ao recurso no RD para fazer o download.</p>
+
+      <div class="search" role="search">
+        <svg class="search__icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M10 2a8 8 0 0 1 6.32 12.9l5.39 5.39-1.42 1.42-5.39-5.39A8 8 0 1 1 10 2zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg>
+        <input id="q" class="search__input" type="search" placeholder="Busque por curso, unidade curricular ou material…" autocomplete="off" aria-label="Buscar recursos">
+        <button id="clearQ" class="search__clear" type="button" aria-label="Limpar busca" hidden>×</button>
+      </div>
+
+      <ul class="stats" id="stats" aria-live="polite"></ul>
+    </div>
+  </section>
+
+  <main class="container layout">
+    <aside class="filters" aria-label="Filtros">
+      <div class="filters__head">
+        <h2 class="filters__title">Filtros</h2>
+        <button class="link-btn" id="resetFilters" type="button">Limpar tudo</button>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="curso">1. Curso</label>
+        <div class="select">
+          <select id="curso"></select>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="field__label" id="ucLabel">2. Unidade curricular</span>
+        <div class="chips chips--stack" id="ucList" role="group" aria-labelledby="ucLabel"></div>
+      </div>
+
+      <div class="field">
+        <span class="field__label" id="tipoLabel">3. Tipo de material</span>
+        <div class="chips" id="tipoList" role="group" aria-labelledby="tipoLabel"></div>
+      </div>
+    </aside>
+
+    <section class="results" id="resultados" aria-live="polite">
+      <div class="results__bar">
+        <p class="results__count" id="count"></p>
+        <div class="results__tools">
+          <div class="select select--sm">
+            <select id="ordem" aria-label="Ordenar por">
+              <option value="uc">Agrupar por unidade curricular</option>
+              <option value="tipo">Agrupar por tipo</option>
+              <option value="az">Lista A–Z</option>
+            </select>
+          </div>
+          <button class="btn btn--outline filters-toggle" id="openFilters" type="button">Filtros</button>
+        </div>
+      </div>
+      <div class="active-filters" id="activeFilters"></div>
+      <div id="list"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>SENAI · Recursos Didáticos — os downloads são realizados no <a href="https://recursosdidaticos.senai.br/" target="_blank" rel="noopener">RD tradicional</a>.</p>
+    </div>
+  </footer>
+
+  <script src="data/recursos.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
