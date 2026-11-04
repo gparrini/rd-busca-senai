@@ -15,16 +15,14 @@
   <header class="topbar">
     <div class="container topbar__inner">
       <div class="brand">
-        <span class="brand__mark" aria-hidden="true">SENAI</span>
+        <img class="brand__logo" src="img/senai-logo.png" alt="SENAI" width="104" height="28">
         <span class="brand__divider" aria-hidden="true"></span>
-        <span class="brand__name">Recursos Didáticos</span>
+        <span class="brand__name">Busca de recursos</span>
       </div>
-      <div class="topbar__actions">
-        <a class="btn btn--ghost" href="https://recursosdidaticos.senai.br/" target="_blank" rel="noopener">RD tradicional <span aria-hidden="true">↗</span></a>
-        <button class="icon-btn" id="themeToggle" type="button" aria-label="Alternar modo escuro">
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
-        </button>
-      </div>
+      <a class="rd-link" href="https://recursosdidaticos.senai.br/" target="_blank" rel="noopener" title="Ir para o RD tradicional">
+        <img src="img/rd-logo.png" alt="Recursos Didáticos SENAI (RD tradicional)" width="104" height="34">
+        <span class="rd-link__go" aria-hidden="true">↗</span>
+      </a>
     </div>
   </header>
 
@@ -32,16 +30,22 @@
     <div class="container">
       <p class="hero__eyebrow">Biblioteca de materiais por curso</p>
       <h1 class="hero__title">Encontre o material didático do seu curso</h1>
-      <p class="hero__lead">Escolha o curso, a unidade curricular e o tipo de material. Ao clicar, você é levado ao recurso no RD para fazer o download.</p>
+      <p class="hero__lead">Digite o nome do material, curso ou unidade curricular. Aceitamos siglas como SA e PE, e corrigimos erros de digitação. Ao clicar, você vai para o recurso no RD para fazer o download.</p>
 
       <div class="search" role="search">
         <svg class="search__icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M10 2a8 8 0 0 1 6.32 12.9l5.39 5.39-1.42 1.42-5.39-5.39A8 8 0 1 1 10 2zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg>
-        <input id="q" class="search__input" type="search" placeholder="Busque por curso, unidade curricular ou material…" autocomplete="off" aria-label="Buscar recursos">
+        <input id="q" class="search__input" type="search" placeholder="Ex.: lógica de programação, SA mecatrônica, simulador…" autocomplete="off"
+          aria-label="Buscar recursos" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="acMain">
         <button id="clearQ" class="search__clear" type="button" aria-label="Limpar busca" hidden>×</button>
+        <div class="ac" id="acMain" role="listbox" aria-label="Sugestões" hidden></div>
       </div>
 
-      <ul class="stats" id="stats" aria-live="polite"></ul>
+      <ul class="stats" id="stats"></ul>
     </div>
+  </section>
+
+  <section class="container quick-wrap" aria-label="Explorar por categoria">
+    <div class="quick-list" id="quickCats"></div>
   </section>
 
   <main class="container layout">
@@ -52,45 +56,98 @@
       </div>
 
       <div class="field">
-        <label class="field__label" for="curso">1. Curso</label>
-        <div class="select">
-          <select id="curso"></select>
-        </div>
+        <label class="field__label" for="cursoQ">Curso</label>
+        <input id="cursoQ" class="field__input" type="search" autocomplete="off">
+        <div class="chips chips--stack chips--scroll" id="cursoList" role="group" aria-label="Cursos"></div>
       </div>
 
       <div class="field">
-        <span class="field__label" id="ucLabel">2. Unidade curricular</span>
-        <div class="chips chips--stack" id="ucList" role="group" aria-labelledby="ucLabel"></div>
+        <label class="field__label" for="ucQ">Unidade curricular</label>
+        <input id="ucQ" class="field__input" type="search" autocomplete="off">
+        <div class="chips chips--stack chips--scroll" id="ucList" role="group" aria-label="Unidades curriculares"></div>
       </div>
 
       <div class="field">
-        <span class="field__label" id="tipoLabel">3. Tipo de material</span>
+        <span class="field__label" id="catLabel">Categoria</span>
+        <div class="chips chips--stack" id="catList" role="group" aria-labelledby="catLabel"></div>
+      </div>
+
+      <div class="field">
+        <span class="field__label" id="tipoLabel">Tipo de material</span>
         <div class="chips" id="tipoList" role="group" aria-labelledby="tipoLabel"></div>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="area">Área tecnológica</label>
+        <div class="select"><select id="area"></select></div>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="dep">Departamento regional</label>
+        <div class="select"><select id="dep"></select></div>
+      </div>
+
+      <div class="field">
+        <label class="check"><input type="checkbox" id="dl"> <span>Somente com download liberado</span></label>
       </div>
     </aside>
 
-    <section class="results" id="resultados" aria-live="polite">
+    <section class="results" id="resultados">
+      <div class="guide" id="guide">
+        <ol class="steps" id="steps" aria-label="Etapas da busca guiada"></ol>
+
+        <div id="guideStart" hidden>
+          <h2 class="guide__title">Qual é o seu curso?</h2>
+          <p class="guide__lead">Escolha o curso para ver as unidades curriculares e os materiais de cada uma.</p>
+          <div class="search search--guide">
+            <svg class="search__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3zm-7 9.18v4L12 20l7-3.82v-4L12 16l-7-3.82z"/></svg>
+            <input id="guideQ" class="search__input" type="search" placeholder="Digite o nome do curso, ex.: eletrotécnica" autocomplete="off"
+              aria-label="Buscar curso" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="acGuide">
+            <div class="ac" id="acGuide" role="listbox" aria-label="Cursos sugeridos" hidden></div>
+          </div>
+          <div class="guide__popular"><span>Mais procurados:</span><div class="chips" id="guidePopular"></div></div>
+        </div>
+
+        <div id="guideCourse" hidden>
+          <div class="guide__head">
+            <div>
+              <p class="guide__eyebrow">Seu curso</p>
+              <h2 class="guide__title" id="gcName"></h2>
+              <p class="guide__meta" id="gcMeta"></p>
+            </div>
+            <button type="button" class="btn btn--outline" data-remove="curso">Trocar curso</button>
+          </div>
+          <div class="guide__cats chips" id="gcCats" role="group" aria-label="Filtrar por categoria"></div>
+          <div id="gcUcPick">
+            <div class="guide__subhead">
+              <h3>Escolha a unidade curricular</h3>
+              <input id="gcUcQ" class="field__input" type="search" placeholder="Filtrar unidades…" autocomplete="off" aria-label="Filtrar unidades curriculares">
+            </div>
+            <div class="uc-grid" id="gcUcs"></div>
+            <div id="ucMore"></div>
+          </div>
+          <div class="guide__ucsel" id="gcUcSel" hidden></div>
+        </div>
+      </div>
+
       <div class="results__bar">
-        <p class="results__count" id="count"></p>
+        <p class="results__count" id="count" aria-live="polite"></p>
         <div class="results__tools">
           <div class="select select--sm">
-            <select id="ordem" aria-label="Ordenar por">
-              <option value="uc">Agrupar por unidade curricular</option>
-              <option value="tipo">Agrupar por tipo</option>
-              <option value="az">Lista A–Z</option>
-            </select>
+            <select id="ordem" aria-label="Ordenar por"></select>
           </div>
           <button class="btn btn--outline filters-toggle" id="openFilters" type="button">Filtros</button>
         </div>
       </div>
       <div class="active-filters" id="activeFilters"></div>
+      <div id="notice" aria-live="polite"></div>
       <div id="list"></div>
     </section>
   </main>
 
   <footer class="footer">
     <div class="container">
-      <p>SENAI · Recursos Didáticos — os downloads são realizados no <a href="https://recursosdidaticos.senai.br/" target="_blank" rel="noopener">RD tradicional</a>.</p>
+      <p>SENAI · Recursos Didáticos. Os downloads são feitos no <a href="https://recursosdidaticos.senai.br/" target="_blank" rel="noopener">RD tradicional</a>. <span id="updated"></span></p>
     </div>
   </footer>
 
