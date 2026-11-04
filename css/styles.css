@@ -186,10 +186,10 @@ button, input, select { font: inherit; color: inherit; }
 .card__icon { flex: none; width: 44px; height: 44px; border-radius: var(--radius-s); display: grid; place-items: center; color: #fff; }
 .card__icon svg { width: 22px; height: 22px; }
 .card__body { min-width: 0; flex: 1; }
-.card__type { font-size: 12px; line-height: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
+.card__type { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; line-height: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
 .card__title { margin: 2px 0 4px; font-family: var(--font-heading); font-size: 16px; line-height: 22px; font-weight: 600; }
 .card__meta { font-size: 13px; line-height: 18px; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.card__go { flex: none; align-self: center; color: var(--text-muted); font-size: 18px; transition: color .15s, transform .15s; }
+.card__go { flex: none; align-self: flex-start; line-height: 18px; color: var(--text-muted); font-size: 18px; transition: color .15s, transform .15s; }
 .card:hover .card__go { color: var(--accent); transform: translateX(2px); }
 .card mark { background: var(--primary-100); color: inherit; border-radius: 2px; padding: 0 1px; }
 :root.dark .card mark { background: rgba(245, 99, 26, .35); }
