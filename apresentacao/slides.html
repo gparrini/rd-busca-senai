@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nova Busca do RD</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --or: #f5631a; --or-d: #bf340f; --or-50: #fff6ed; --or-100: #feead6;
+  --bl: #1670fa; --bl-9: #164194; --bl-95: #122859; --bl-50: #eef7ff; --bl-100: #d8edff;
+  --n0: #fff; --n50: #f7f8f9; --n100: #f2f4f5; --n150: #e4e8e9; --n500: #617379; --n700: #475157; --n950: #22272a;
+  --hero: linear-gradient(135deg, #122859 0%, #164194 55%, #0f59e6 100%);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #2b2f33; font-family: "Open Sans", Arial, sans-serif; color: var(--n950); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+h1, h2, h3, p { margin: 0; }
+
+.slide { position: relative; width: 1280px; height: 720px; overflow: hidden; background: var(--n0); padding: 56px 72px 48px; display: flex; flex-direction: column; }
+.slide + .slide { margin-top: 24px; }
+.tag { display: inline-flex; align-self: flex-start; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--or-d); }
+.tag::before { content: ""; width: 22px; height: 4px; border-radius: 2px; background: var(--or); }
+.title { margin-top: 10px; font-size: 40px; line-height: 50px; font-weight: 800; letter-spacing: -.4px; color: var(--bl-95); }
+.lead { margin-top: 12px; font-size: 20px; line-height: 30px; color: var(--n700); max-width: 900px; }
+.foot { position: absolute; left: 72px; right: 72px; bottom: 22px; display: flex; justify-content: space-between; font-size: 12px; color: var(--n500); }
+.foot img { height: 16px; }
+.num { font-variant-numeric: tabular-nums; }
+.body { flex: 1; min-height: 0; margin-top: 28px; display: flex; gap: 40px; }
+.col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+/* telas */
+.shot { position: relative; border-radius: 14px; overflow: hidden; background: var(--n100); border: 1px solid var(--n150); box-shadow: 0 18px 40px rgba(18, 40, 89, .18); }
+.shot img { display: block; width: 100%; }
+.crop { position: relative; overflow: hidden; border-radius: 14px; border: 1px solid var(--n150); box-shadow: 0 18px 40px rgba(18, 40, 89, .18); background: #f4f4f4; }
+.crop img { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
+.bar { height: 26px; display: flex; align-items: center; gap: 6px; padding: 0 12px; background: var(--n150); }
+.bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--n0); }
+
+/* listas */
+.points { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 18px; }
+.points li { display: flex; gap: 14px; font-size: 19px; line-height: 27px; color: var(--n700); }
+.points li b { color: var(--n950); }
+.points .ic { flex: none; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--or-50); color: var(--or-d); font-weight: 800; font-size: 16px; }
+.points.blue .ic { background: var(--bl-50); color: var(--bl-9); }
+
+/* capa */
+.cover { padding: 0; background: var(--hero); color: #fff; }
+.cover__top { display: flex; align-items: center; justify-content: space-between; height: 84px; padding: 0 72px; background: #fff; }
+.cover__top img.s { height: 38px; }
+.cover__top img.r { height: 40px; }
+.cover__body { flex: 1; display: flex; align-items: center; gap: 48px; padding: 0 0 0 72px; }
+.cover__text { flex: 0 0 560px; }
+.cover h1 { font-size: 54px; line-height: 64px; font-weight: 800; letter-spacing: -.6px; }
+.cover h1 em { font-style: normal; color: #ffb27f; }
+.cover p { margin-top: 22px; font-size: 22px; line-height: 33px; color: var(--bl-100); }
+.cover .who { margin-top: 40px; font-size: 16px; color: #fff; opacity: .85; }
+.cover__img { flex: 1; align-self: flex-end; height: 560px; border-radius: 16px 0 0 0; overflow: hidden; box-shadow: -20px 0 60px rgba(0, 0, 0, .35); }
+.cover__img img { width: 900px; display: block; }
+
+/* números */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.stat { padding: 26px 24px; border-radius: 18px; background: var(--n50); border: 1px solid var(--n150); }
+.stat > b { display: block; font-size: 48px; line-height: 56px; font-weight: 800; color: var(--bl-9); }
+.stat span { display: block; margin-top: 6px; font-size: 17px; line-height: 24px; color: var(--n700); }
+.stat.or > b { color: var(--or-d); }
+.note { margin-top: auto; font-size: 13px; color: var(--n500); }
+
+/* cards de dor */
+.pains { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.pain { display: flex; gap: 18px; padding: 24px; border-radius: 18px; border: 1px solid var(--n150); background: var(--n0); box-shadow: 0 6px 18px rgba(18, 40, 89, .06); }
+.pain__ic { flex: none; width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; background: var(--or-50); color: var(--or-d); }
+.pain__ic svg { width: 28px; height: 28px; }
+.pain h3 { font-size: 21px; line-height: 28px; font-weight: 700; color: var(--bl-95); }
+.pain p { margin-top: 6px; font-size: 16px; line-height: 24px; color: var(--n700); }
+
+.quote { margin-top: 22px; padding: 18px 24px; border-left: 5px solid var(--or); background: var(--or-50); border-radius: 0 14px 14px 0; font-size: 19px; line-height: 28px; color: var(--n950); }
+
+/* divisória */
+.divider { background: var(--hero); color: #fff; justify-content: center; }
+.divider .tag { color: #ffb27f; }
+.divider .tag::before { background: #ffb27f; }
+.divider h2 { margin-top: 14px; font-size: 64px; line-height: 74px; font-weight: 800; letter-spacing: -.8px; }
+.divider p { margin-top: 18px; max-width: 820px; font-size: 24px; line-height: 36px; color: var(--bl-100); }
+
+/* passos */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 30px; }
+.step { display: flex; flex-direction: column; gap: 12px; }
+.step__n { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; color: var(--or-d); text-transform: uppercase; letter-spacing: .8px; }
+.step__n b { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--or); color: #fff; font-size: 16px; letter-spacing: 0; }
+.step h3 { font-size: 20px; line-height: 26px; color: var(--bl-95); }
+.step p { font-size: 15px; line-height: 22px; color: var(--n700); }
+.step .crop { height: 270px; }
+
+/* tabela dor x solução */
+.map { display: flex; flex-direction: column; gap: 12px; margin-top: 26px; }
+.map__row { display: grid; grid-template-columns: 1fr 44px 1.25fr; align-items: center; }
+.map__d, .map__s { padding: 14px 20px; border-radius: 14px; font-size: 17px; line-height: 24px; }
+.map__d { background: var(--or-50); color: var(--n950); }
+.map__s { background: var(--bl-50); color: var(--n950); }
+.map__s b { color: var(--bl-9); }
+.map__a { text-align: center; font-size: 22px; color: var(--n500); }
+.map__h { display: grid; grid-template-columns: 1fr 44px 1.25fr; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--n500); }
+
+/* linha do tempo */
+.road { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 30px; }
+.phase { position: relative; padding: 24px; border-radius: 18px; border: 1px solid var(--n150); background: var(--n0); }
+.phase.now { border: 2px solid var(--or); background: var(--or-50); }
+.phase__k { font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--n500); }
+.phase.now .phase__k { color: var(--or-d); }
+.phase h3 { margin-top: 6px; font-size: 22px; line-height: 29px; color: var(--bl-95); }
+.phase ul { margin: 12px 0 0; padding-left: 20px; font-size: 16px; line-height: 24px; color: var(--n700); }
+.phase li + li { margin-top: 6px; }
+.callout { margin-top: 22px; display: flex; gap: 18px; align-items: center; padding: 18px 24px; border-radius: 16px; background: var(--bl-50); font-size: 17px; line-height: 26px; color: var(--n950); }
+.callout b { color: var(--bl-9); }
+
+/* final */
+.end { background: var(--hero); color: #fff; justify-content: center; align-items: center; text-align: center; }
+.end h2 { font-size: 72px; line-height: 80px; font-weight: 800; }
+.end p { margin-top: 18px; font-size: 24px; color: var(--bl-100); }
+
+/* apêndice TI */
+.ti { background: var(--n50); }
+.ti .tag { color: var(--bl-9); }
+.ti .tag::before { background: var(--bl); }
+.box { padding: 20px 22px; border-radius: 16px; background: var(--n0); border: 1px solid var(--n150); }
+.box h3 { font-size: 18px; line-height: 24px; color: var(--bl-95); }
+.box p, .box li { font-size: 15px; line-height: 22px; color: var(--n700); }
+.box p { margin-top: 6px; }
+.box ul { margin: 8px 0 0; padding-left: 18px; }
+.box li + li { margin-top: 4px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.flow { display: flex; align-items: stretch; gap: 10px; }
+.flow > div { flex: 1; padding: 14px; border-radius: 14px; background: var(--n0); border: 1px solid var(--n150); font-size: 14px; line-height: 20px; color: var(--n700); }
+.flow > div b { display: block; margin-bottom: 4px; font-size: 15px; color: var(--bl-95); }
+.flow > span { align-self: center; color: var(--n500); font-size: 20px; }
+.pill { display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--bl-50); color: var(--bl-9); font-size: 13px; font-weight: 700; }
+
+/* modo tela: um slide por vez */
+@media screen {
+  body { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+  .deck { transform-origin: center center; }
+  .slide { display: none; margin: 0 !important; box-shadow: 0 20px 60px rgba(0,0,0,.4); }
+  .slide.on { display: flex; }
+  .hud { position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; align-items: center; padding: 6px 10px; border-radius: 999px; background: rgba(0,0,0,.55); color: #fff; font-size: 13px; }
+  .hud button { width: 30px; height: 30px; border: 0; border-radius: 50%; background: rgba(255,255,255,.15); color: #fff; font-size: 16px; cursor: pointer; }
+}
+@media print {
+  @page { size: 1280px 720px; margin: 0; }
+  html, body { background: #fff; }
+  .slide { break-after: page; margin: 0 !important; }
+  .hud { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<!-- 1. Capa -->
+<section class="slide cover">
+  <div class="cover__top">
+    <img class="s" src="../img/senai-logo.png" alt="SENAI">
+    <img class="r" src="../img/rd-logo.png" alt="Recursos Didáticos">
+  </div>
+  <div class="cover__body">
+    <div class="cover__text">
+      <h1>Encontrar o material certo, <em>do jeito certo</em></h1>
+      <p>Uma nova busca para o acervo de Recursos Didáticos do SENAI: guiada por curso e unidade curricular, simples para quem usa.</p>
+      <p class="who">Giuseppe Parrini · Proposta de melhoria · Novembro de 2026</p>
+    </div>
+    <div class="cover__img"><img src="prints/home.png" alt=""></div>
+  </div>
+</section>
+
+<!-- 2. Contexto -->
+<section class="slide">
+  <span class="tag">O cenário</span>
+  <h2 class="title">O RD tem um acervo enorme, e isso é ótimo</h2>
+  <p class="lead">É o lugar onde os Departamentos Regionais publicam e buscam os materiais dos cursos. O desafio não é ter o material. É <b>encontrar o material certo</b>.</p>
+  <div class="stats" style="margin-top:36px">
+    <div class="stat"><b class="num">29.664</b><span>recursos públicos</span></div>
+    <div class="stat"><b class="num">605</b><span>cursos</span></div>
+    <div class="stat"><b class="num">1.784</b><span>unidades curriculares</span></div>
+    <div class="stat"><b class="num">29</b><span>departamentos que publicam (DRs, DN e CETIQT)</span></div>
+  </div>
+  <p class="note">Fonte: relatório de publicação de recursos do RD, apenas recursos com visibilidade pública (exportado em 04/11/2026).</p>
+  <div class="foot"><span>Nova busca de Recursos Didáticos</span><span>2</span></div>
+</section>
+
+<!-- 3. A dor -->
+<section class="slide">
+  <span class="tag">A dor</span>
+  <h2 class="title">Hoje, buscar no RD não é intuitivo</h2>
+  <p class="lead">Quem precisa de material (o DR que desenvolve ou o DR que vai ofertar um curso) acaba "garimpando" e corre riscos.</p>
+  <div class="pains" style="margin-top:28px">
+    <div class="pain">
+      <div class="pain__ic"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M10 2a8 8 0 0 1 6.32 12.9l5.39 5.39-1.42 1.42-5.39-5.39A8 8 0 1 1 10 2zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg></div>
+      <div><h3>Difícil de encontrar</h3><p>A busca não guia pelo curso e pela unidade curricular. Quando "encontra", nem sempre é o que precisava.</p></div>
+    </div>
+    <div class="pain">
+      <div class="pain__ic"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm1 3v4.6l3.2 3.2-1.4 1.4L11 12.4V7h2z"/></svg></div>
+      <div><h3>Material de curso antigo</h3><p>É fácil baixar o arquivo de uma versão anterior do curso sem perceber.</p></div>
+    </div>
+    <div class="pain">
+      <div class="pain__ic"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 7V3.5L18.5 9H13zM9.4 12l1.6 1.6 1.6-1.6 1.4 1.4-1.6 1.6 1.6 1.6-1.4 1.4-1.6-1.6-1.6 1.6L8 17.6 9.6 16 8 14.4 9.4 12z"/></svg></div>
+      <div><h3>Arquivo errado</h3><p>Materiais com nomes parecidos aparecem misturados, e o download sai trocado.</p></div>
+    </div>
+    <div class="pain">
+      <div class="pain__ic"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 2c-2.7 0-8 1.3-8 4v2h10v-2c0-1 .4-1.9 1-2.6A13 13 0 0 0 8 13zm8 0c-.3 0-.7 0-1.1.1A4.6 4.6 0 0 1 17 17v2h7v-2c0-2.7-5.3-4-8-4z"/></svg></div>
+      <div><h3>Versão de outro DR</h3><p>Um DR republica o material com pequenas alterações. Quem busca baixa essa cópia em vez do original de quem desenvolveu o curso.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Nova busca de Recursos Didáticos</span><span>3</span></div>
+</section>
+
+<!-- 4. A dor em números -->
+<section class="slide">
+  <span class="tag">A dor em números</span>
+  <h2 class="title">Os próprios dados do RD mostram o problema</h2>
+  <p class="lead">Com tantos materiais parecidos, escolher o certo depende de olhar com atenção quem publicou e quando.</p>
+  <div class="stats" style="margin-top:32px">
+    <div class="stat or"><b class="num">2.487</b><span>nomes de material que se repetem, somando <b>7.322 recursos</b></span></div>
+    <div class="stat or"><b class="num">746</b><span>nomes de material publicados por <b>mais de um DR</b></span></div>
+    <div class="stat or"><b class="num">19 DRs</b><span>publicaram materiais para um mesmo curso (Técnico em Automação Industrial: 1.688 materiais)</span></div>
+    <div class="stat or"><b class="num">32%</b><span>dos recursos tiveram a última atualização em 2022 ou antes</span></div>
+  </div>
+  <div class="quote">Ter várias versões não é ruim: cada DR adapta à sua realidade. O problema é a busca <b>não ajudar</b> a pessoa a ver a diferença e escolher.</div>
+  <p class="note" style="margin-top:16px">Fonte: relatório de publicação de recursos do RD (recursos públicos, 04/11/2026). Nomes comparados sem diferenciar maiúsculas e acentos.</p>
+  <div class="foot"><span>Nova busca de Recursos Didáticos</span><span>4</span></div>
+</section>
+
+<!-- 5. Consequências -->
+<section class="slide">
+  <span class="tag">O que isso causa</span>
+  <h2 class="title">Tempo perdido e risco na oferta dos cursos</h2>
+  <div class="body">
+    <div class="col">
+      <ul class="points" style="margin-top:8px">
+        <li><span class="ic">1</span><span><b>Retrabalho:</b> baixar, abrir, perceber que não é o arquivo certo e começar de novo.</span></li>
+        <li><span class="ic">2</span><span><b>Curso ofertado com material desatualizado</b> ou diferente do que foi desenvolvido.</span></li>
+        <li><span class="ic">3</span><span><b>Material "de segunda mão":</b> a versão de outro DR acaba circulando no lugar do original.</span></li>
+        <li><span class="ic">4</span><span><b>Mais dúvidas e pedidos de ajuda</b> para achar o que já está publicado.</span></li>
+      </ul>
+    </div>
+    <div class="col" style="flex:0 0 420px; justify-content:center">
+      <div class="quote" style="margin:0; font-size:22px; line-height:33px">O material existe, está publicado e é de qualidade. Mas, se a pessoa não encontra ou pega a versão errada, <b>o esforço de quem desenvolveu se perde</b>.</div>
+    </div>
+  </div>
+  <div class="foot"><span>Nova busca de Recursos Didáticos</span><span>5</span></div>
+</section>
+
+<!-- 6. Divisória -->
+<section class="slide divider">
+  <span class="tag">A solução</span>
+  <h2>Uma busca que guia até o material certo</h2>
+  <p>Uma nova "vitrine" para o acervo do RD. Mesmos materiais, encontrados de um jeito muito mais simples. O download continua no RD.</p>
+</section>
+
+<!-- 7. Visão geral -->
+<section class="slide">
+  <span class="tag">A solução</span>
+  <h2 class="title">Uma página, tudo à mão</h2>
+  <div class="body">
+    <div class="col" style="flex:0 0 380px">
+      <ul class="points blue">
+        <li><span class="ic">✓</span><span><b>Mesma base do RD:</b> os quase 30 mil recursos públicos.</span></li>
+        <li><span class="ic">✓</span><span><b>Começa pelo que a pessoa sabe:</b> o curso e a unidade curricular.</span></li>
+        <li><span class="ic">✓</span><span><b>Mostra quem publicou e quando</b>, em todos os materiais.</span></li>
+        <li><span class="ic">✓</span><span><b>Um clique abre o recurso no RD</b> para fazer o download, como sempre.</span></li>
+        <li><span class="ic">✓</span><span><b>Visual do SENAI</b>, seguindo o Design System oficial.</span></li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="shot"><div class="bar"><i></i><i></i><i></i></div><img src="prints/home.png" alt="Tela inicial"></div>
+    </div>
+  </div>
+  <div class="foot"><span>Nova busca de Recursos Didáticos</span><span>7</span></div>
+</section>
+
+<!-- 8. Como funciona -->
+<section class="slide">
+  <span class="tag">Como funciona</span>
+  <h2 class="title">Do curso ao material em 3 cliques</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step__n"><b>1</b> Curso</div>
+      <div class="crop"><img src="prints/guia.png" style="width:1440px; transform: scale(.5) translate(-490px,-30px)" alt=""></div>
+      <h3>Escolhe o curso</h3><p>Digita parte do nome ou toca em um dos mais procurados.</p>
+    </div>
+    <div class="step">
+      <div class="step__n"><b>2</b> Unidade</div>
+      <div class="crop"><img src="prints/curso.png" style="width:1440px; transform: scale(.5) translate(-490px,-90px)" alt=""></div>
+      <h3>Escolhe a unidade curricular</h3><p>Vê todas as UCs do curso, com a quantidade de materiais de cada uma.</p>
+    </div>
+    <div class="step">
+      <div class="step__n"><b>3</b> Materiais</div>
+      <div class="crop"><img src="prints/uc.png" style="width:1440px; transform: scale(.5) translate(-478px,-270px)" alt=""></div>
+      <h3>Vê os materiais</h3><p>Organizados por categoria, com DR e data de atualização.</p>
+    </div>
+    <div class="step">
+      <div class="step__n"><b>✓</b> Download</div>
+      <div class="crop" style="display:grid; place-items:center; background:var(--bl-50)"><img src="../img/rd-logo.png" style="position:static; width:200px" alt="RD"></div>
+      <h3>Baixa no RD</h3><p>O clique abre a página do recurso no RD tradicional.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Nova busca de Recursos Didáticos</span><span>8</span></div>
+</section>
+
+<!-- 9. Sugestões -->
+<section class="slide">
+  <span class="tag">Funcionalidade</span>
+  <h2 class="title">Sugestões enquanto digita</h2>
+  <div class="body">
+    <div class="col" style="flex:0 0 360px">
+      <p class="lead" style="margin:0">Ao digitar só uma palavra, a busca já mostra os <b>cursos</b> e as <b>unidades curriculares</b> relacionados, com quantos materiais cada um tem.</p>
+      <p class="lead">Um clique e os resultados já ficam filtrados. Sem precisar acertar o nome exato.</p>
+    </div>
+    <div class="col">
+      <div class="crop" style="height:520px"><img src="prints/autocomplete.png" style="width:1440px; transform: scale(.88) translate(-90px,-280px)" alt=""></div>
+    </div>
+  </div>
+  <div class="foot"><span>Nova busca de Recursos Didáticos</span><span>9</span></div>
+</section>
+
+<!-- 10. Caminho guiado -->
+<section class="slide">
+  <span class="tag">Funcionalidade</span>
+  <h2 class="title">Caminho guiado: curso → unidade → materiais</h2>
+  <div class="body">
+    <div class="col" style="flex:0 0 340px">
+      <ul class="points">
+        <li><span class="ic">1</span><span>A pessoa vê <b>em que etapa está</b>.</span></li>
+        <li><span class="ic">2</span><span>Todas as <b>unidades curriculares</b> do curso aparecem em blocos, com a quantidade de materiais.</span></li>
+        <li><span class="ic">3</span><span>Os <b>materiais gerais do curso</b> (sem UC) ficam separados.</span></li>
+        <li><span class="ic">4</span><span>Dá para <b>trocar de curso ou de unidade</b> a qualquer momento.</span></li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="crop" style="height:540px"><img src="prints/curso.png" style="width:1440px; transform: scale(.9) translate(-470px,-14px)" alt=""></div>
+    </div>
+  </div>
+  <div class="foot"><span>Nova busca de Recursos Didáticos</span><span>10</span></div>
+</section>
+
+<!-- 11. Cards -->
+<section class="slide">
+  <span class="tag">Funcionalidade</span>
+  <h2 class="title">Cada material mostra o que importa para escolher</h2>
+  <div class="body">
+    <div class="col">
+      <div class="crop" style="height:470px"><img src="prints/uc.png" style="width:1440px; transform: scale(.85) translate(-470px,-346px)" alt=""></div>
+    </div>
+    <div class="col" style="flex:0 0 380px">
+      <ul class="points blue">
+        <li><span class="ic">◆</span><span><b>Categoria por cor e ícone:</b> mídia, publicação, situação de aprendizagem…</span></li>
+        <li><span class="ic">◆</span><span><b>Unidade curricular e curso</b> a que o material pertence.</span></li>
+        <li><span class="ic">◆</span><span><b>DR que publicou:</b> clicando, vê só os materiais daquele DR.</span></li>
+        <li><span class="ic">◆</span><span><b>Data da última atualização</b>, para evitar material antigo.</span></li>
+        <li><span class="ic">◆</span><span>Aviso de <b>"Só visualização"</b> quando o download não é liberado.</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>Nova busca de Recursos Didáticos</span><span>11</span></div>
+</section>
+
+<!-- 12. Siglas e erros -->
+<section class="slide">
+  <span class="tag">Funcionalidade</span>
+  <h2 class="title">Entende siglas e corrige erros de digitação</h2>
+  <div class="body" style="gap:28px">
+    <div class="col">
+      <p class="lead" style="margin:0 0 14px; font-size:17px; line-height:24px; min-height:48px">Digitou <b>"eletrotecinca"</b>? A busca entende <b>eletrotécnica</b>.</p>
+      <div class="crop" style="height:420px"><img src="prints/erro.png" style="width:1440px; transform: scale(.66) translate(-468px,-4px)" alt=""></div>
+    </div>
+    <div class="col">
+      <p class="lead" style="margin:0 0 14px; font-size:17px; line-height:24px; min-height:48px">Digitou <b>"SA logística"</b>? Busca também por <b>Situação de Aprendizagem</b>.</p>
+      <div class="crop" style="height:420px"><img src="prints/sigla.png" style="width:1440px; transform: scale(.66) translate(-468px,-4px)" alt=""></div>
+    </div>
+  </div>
+  <div class="foot"><span>Nova busca de Recursos Didáticos</span><span>12</span></div>
+</section>
+
+<!-- 13. Sem beco sem saída -->
+<section class="slide">
+  <span class="tag">Funcionalidade</span>
+  <h2 class="title">Nunca deixa a pessoa sem saída</h2>
+  <div class="body">
+    <div class="col" style="flex:0 0 360px">
+      <p class="lead" style="margin:0">Quando não há resultado, a busca <b>explica o motivo</b> e <b>sugere o próximo passo</b>, já mostrando quantos materiais cada opção vai trazer.</p>
+      <p class="lead">Os filtros usados ficam visíveis e podem ser removidos com um clique.</p>
+    </div>
+    <div class="col">
+      <div class="crop" style="height:395px"><img src="prints/vazio.png" style="width:1440px; transform: scale(.88) translate(-468px,-4px)" alt=""></div>
+    </div>
+  </div>
+  <div class="foot"><span>Nova busca de Recursos Didáticos</span><span>13</span></div>
+</section>
+
+<!-- 14. Filtros e celular -->
+<section class="slide">
+  <span class="tag">Funcionalidade</span>
+  <h2 class="title">Filtros simples e funciona no celular</h2>
+  <div class="body">
+    <div class="col" style="flex:0 0 330px">
+      <ul class="points blue">
+        <li><span class="ic">▾</span><span>Filtrar por <b>curso, unidade, categoria, tipo, área e DR</b>.</span></li>
+        <li><span class="ic">▾</span><span>Mostrar <b>somente o que tem download liberado</b>.</span></li>
+        <li><span class="ic">▾</span><span>Ordenar por <b>mais recentes</b>, relevância ou A–Z.</span></li>
+        <li><span class="ic">▾</span><span>O <b>link da busca pode ser compartilhado</b> com os filtros já aplicados.</span></li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="crop" style="height:520px"><img src="prints/filtros.png" style="width:1440px; transform: scale(.5) translate(-130px,-40px)" alt=""></div>
+    </div>
+    <div style="flex:0 0 240px">
+      <div class="shot" style="border-radius:26px; border:6px solid var(--n950)"><img src="prints/mobile.png" alt="Versão no celular"></div>
+    </div>
+  </div>
+  <div class="foot"><span>Nova busca de Recursos Didáticos</span><span>14</span></div>
+</section>
+
+<!-- 15. Dor x solução -->
+<section class="slide">
+  <span class="tag">Resumo</span>
+  <h2 class="title">Cada dor tem uma resposta</h2>
+  <div class="map">
+    <div class="map__h"><span>Dor de hoje</span><span></span><span>Como a nova busca resolve</span></div>
+    <div class="map__row"><div class="map__d">Busca pouco intuitiva</div><div class="map__a">→</div><div class="map__s"><b>Caminho guiado</b> por curso e unidade, com sugestões enquanto digita</div></div>
+    <div class="map__row"><div class="map__d">Baixar material de curso antigo</div><div class="map__a">→</div><div class="map__s"><b>Data de atualização</b> em todos os materiais e ordenação por mais recentes</div></div>
+    <div class="map__row"><div class="map__d">Baixar o arquivo errado</div><div class="map__a">→</div><div class="map__s"><b>Categoria, tipo, UC e curso</b> visíveis antes do clique</div></div>
+    <div class="map__row"><div class="map__d">Pegar a versão de outro DR</div><div class="map__a">→</div><div class="map__s"><b>DR que publicou</b> em destaque, com filtro por DR</div></div>
+    <div class="map__row"><div class="map__d">Errar o nome ou usar sigla</div><div class="map__a">→</div><div class="map__s"><b>Correção de digitação</b> e entendimento de siglas (SA, PE…)</div></div>
+  </div>
+  <div class="foot"><span>Nova busca de Recursos Didáticos</span><span>15</span></div>
+</section>
+
+<!-- 16. Próximos passos -->
+<section class="slide">
+  <span class="tag">Próximos passos</span>
+  <h2 class="title">Do protótipo para as mãos dos DRs</h2>
+  <div class="road">
+    <div class="phase">
+      <p class="phase__k">Feito</p>
+      <h3>Protótipo funcionando</h3>
+      <ul><li>Construído com a base real do RD</li><li>Apresentado e aprovado pela supervisão</li><li>Hoje em hospedagem pessoal, só para demonstração</li></ul>
+    </div>
+    <div class="phase now">
+      <p class="phase__k">Agora</p>
+      <h3>Validação</h3>
+      <ul><li>Apresentação para a coordenação</li><li>Ajustes a partir dos comentários</li><li>Teste com alguns DRs que usam o RD com frequência</li></ul>
+    </div>
+    <div class="phase">
+      <p class="phase__k">Depois</p>
+      <h3>Publicar no próprio RD</h3>
+      <ul><li>Empacotar como SCORM e subir no RD</li><li>Gera um link compartilhável para enviar aos DRs</li><li>Rotina para atualizar a base de materiais</li></ul>
+    </div>
+  </div>
+  <div class="callout"><span style="font-size:28px">💡</span><span><b>Por que SCORM no RD?</b> É o caminho mais rápido: usa um ambiente que já existe e que os DRs já acessam. A alternativa (hospedagem oficial pela TI) leva cerca de <b>15 dias</b> só para validação e preparo do ambiente. Pode ser o passo seguinte, se fizer sentido.</span></div>
+  <div class="foot"><span>Nova busca de Recursos Didáticos</span><span>16</span></div>
+</section>
+
+<!-- 17. Encerramento -->
+<section class="slide end">
+  <h2>Obrigado!</h2>
+  <p>Perguntas, sugestões e ideias são muito bem-vindas.</p>
+  <p style="margin-top:40px; font-size:18px; opacity:.85">Giuseppe Parrini</p>
+</section>
+
+<!-- 18. Apêndice TI: processo -->
+<section class="slide ti">
+  <span class="tag">Apêndice · Para a equipe de TI</span>
+  <h2 class="title">Processo de criação e fases</h2>
+  <div class="flow" style="margin-top:26px">
+    <div><b>1. Dor</b>Conversas e uso do RD: onde a busca falha para quem desenvolve e quem oferta.</div><span>→</span>
+    <div><b>2. Dados</b>Relatório de publicação exportado do RD (planilha .xlsx).</div><span>→</span>
+    <div><b>3. Base</b>Script em Python filtra os públicos, organiza e gera um arquivo de dados leve.</div><span>→</span>
+    <div><b>4. Interface</b>HTML, CSS e JavaScript puro, com o Design System SENAI.</div><span>→</span>
+    <div><b>5. Testes</b>Prints automáticos em desktop e celular. Ajustes a cada rodada de feedback.</div>
+  </div>
+  <div class="grid2" style="margin-top:20px">
+    <div class="box">
+      <h3>Fase atual: MVP validado internamente</h3>
+      <ul>
+        <li>Busca com sugestões, siglas, correção de digitação e relevância</li>
+        <li>Caminho guiado curso → UC → materiais; filtros; link compartilhável</li>
+        <li>Clique leva para <code>recursosdidaticos.senai.br/recurso-didatico/{id}</code></li>
+        <li>Código versionado no GitHub</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Próximas fases</h3>
+      <ul>
+        <li>Empacotar como SCORM e publicar no RD (link compartilhável)</li>
+        <li>Rotina de atualização: reexportar o relatório e regerar a base</li>
+        <li>Futuro: integrar direto com o RD (API) para dados em tempo real</li>
+        <li>Opcional: hospedagem oficial após validação da TI (~15 dias)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>Nova busca de Recursos Didáticos</span><span>18</span></div>
+</section>
+
+<!-- 19. Apêndice TI: ferramentas -->
+<section class="slide ti">
+  <span class="tag">Apêndice · Para a equipe de TI</span>
+  <h2 class="title">Ferramentas, Design System e por que foram escolhidos</h2>
+  <div class="grid2" style="margin-top:24px">
+    <div class="box">
+      <h3>HTML, CSS e JavaScript puro <span class="pill">sem servidor</span></h3>
+      <p>Sem frameworks, sem banco de dados e sem dependências externas. Roda abrindo o arquivo, em qualquer hospedagem estática e <b>dentro de um pacote SCORM</b>. Menos peças, menos manutenção e nada a instalar.</p>
+    </div>
+    <div class="box">
+      <h3>Busca no próprio navegador <span class="pill">instantânea</span></h3>
+      <p>A base (~3 MB, 29.664 recursos) é carregada uma vez e a busca roda no navegador: resultados a cada tecla, sem custo de servidor. Inclui sinônimos, correção por distância de edição e ranking por relevância.</p>
+    </div>
+    <div class="box">
+      <h3>Design System SENAI</h3>
+      <p>Cores, tipografia (Open Sans), espaçamentos e componentes da biblioteca oficial (zeroheight). Garante a identidade da marca e consistência com os outros produtos SENAI. Acessível: navegação por teclado e leitores de tela (ARIA).</p>
+    </div>
+    <div class="box">
+      <h3>Python + Git/GitHub</h3>
+      <p>Python (openpyxl) converte o relatório do RD em dados prontos para a busca, com um único comando. Git e GitHub guardam o histórico de cada mudança e facilitam revisão e entrega para a TI.</p>
+    </div>
+  </div>
+  <p class="note" style="margin-top:16px">Limitação atual: os dados são uma "foto" do relatório exportado (04/11/2026). Só recursos públicos entram na busca. O download e o controle de acesso continuam no RD.</p>
+  <div class="foot"><span>Nova busca de Recursos Didáticos</span><span>19</span></div>
+</section>
+
+</div>
+<div class="hud" id="hud"><button id="prev" aria-label="Anterior">‹</button><span id="pos"></span><button id="next" aria-label="Próximo">›</button></div>
+<script>
+(function () {
+  var s = [].slice.call(document.querySelectorAll(".slide")), i = 0, deck = document.getElementById("deck");
+  try { i = Math.max(0, Math.min(s.length - 1, (parseInt(location.hash.slice(1), 10) || 1) - 1)); } catch (e) {}
+  function fit() { var k = Math.min(innerWidth / 1300, (innerHeight - 60) / 740); deck.style.transform = "scale(" + k + ")"; }
+  function show(n) {
+    i = Math.max(0, Math.min(s.length - 1, n));
+    s.forEach(function (el, j) { el.classList.toggle("on", j === i); });
+    document.getElementById("pos").textContent = (i + 1) + " / " + s.length;
+    try { history.replaceState(null, "", "#" + (i + 1)); } catch (e) {}
+  }
+  addEventListener("keydown", function (e) {
+    if (["ArrowRight", "PageDown", " "].indexOf(e.key) >= 0) { e.preventDefault(); show(i + 1); }
+    if (["ArrowLeft", "PageUp"].indexOf(e.key) >= 0) { e.preventDefault(); show(i - 1); }
+    if (e.key === "Home") show(0);
+    if (e.key === "End") show(s.length - 1);
+  });
+  document.getElementById("prev").onclick = function () { show(i - 1); };
+  document.getElementById("next").onclick = function () { show(i + 1); };
+  addEventListener("resize", fit);
+  fit(); show(i);
+})();
+</script>
+</body>
+</html>

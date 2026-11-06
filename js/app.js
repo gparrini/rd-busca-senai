@@ -486,7 +486,7 @@
     var max = 40, shown = ids.slice(0, max);
     if (sel >= 0) { shown = shown.filter(function (i) { return i !== sel; }); shown.unshift(sel); }
     var html = shown.map(function (i) { return chip(facet, i, dicArr[i], counts[i] || 0, i === sel); }).join("");
-    if (!shown.length) html = '<p class="empty-hint">Nenhum resultado para “' + esc(qText) + "”.</p>";
+    if (!shown.length) html = '<p class="empty-hint">' + (nq ? "Nenhum resultado para “" + esc(qText) + "”." : "Nenhuma opção com os filtros atuais.") + "</p>";
     else if (ids.length > max) html += '<p class="empty-hint">Mostrando ' + max + " de " + fmtN(ids.length) + ". Digite para encontrar " + noun + ".</p>";
     listEl.innerHTML = html;
     return total;
