@@ -223,7 +223,7 @@ html, body { overflow-x: hidden; }
 .card__sep { color: var(--text-muted); }
 .card__tipo { color: var(--neutral-950); }
 .card__pill { flex: none; max-width: 42%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 4px 12px; border-radius: var(--radius-pill); background: var(--neutral-100); color: var(--neutral-700); font-size: 12px; line-height: 16px; font-weight: 600; }
-.card__title { margin: 12px 0 4px; font-family: var(--font-heading); font-size: 19px; line-height: 25px; font-weight: 700; overflow-wrap: anywhere; }
+.card__title { margin: 12px 0 4px; font-family: var(--font-heading); font-size: 16px; line-height: 22px; font-weight: 700; overflow-wrap: anywhere; }
 .card__link { color: var(--neutral-950); text-decoration: none; }
 .card__link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
 .card__link:focus-visible { box-shadow: none; }
